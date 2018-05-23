@@ -509,5 +509,10 @@ public class Obfuscator
         // Remove unused constants.
         programClassPool.classesAccept(
             new ConstantPoolShrinker());
+
+        // Remove kotlin metadata
+        programClassPool.classesAccept(
+            new AllAttributeVisitor(
+            new AnnotationRemover("kotlin.Metadata")));
     }
 }
