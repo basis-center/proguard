@@ -60,6 +60,17 @@ public class Utf8Constant extends Constant
 
     private String string;
 
+    /**
+     * An extra field pointing to the referenced Clazz object, if this
+     * string is being used in Class.forName(), .class, or
+     * Class.getDeclaredField/Method constructs.
+     * This field is typically filled out by the <code>{@link
+     * proguard.classfile.util.DynamicClassReferenceInitializer
+     * DynamicClassReferenceInitializer}</code> or by the <code>{@link
+     * proguard.classfile.util.DynamicMemberReferenceInitializer
+     * DynamicMemberReferenceInitializer}</code>.
+     */
+    public Clazz referencedClass;
 
     /**
      * Creates an uninitialized Utf8Constant.

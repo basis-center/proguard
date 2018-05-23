@@ -33,9 +33,8 @@ import proguard.classfile.constant.visitor.ConstantVisitor;
  * @author Eric Lafortune
  */
 public class StringReferenceInitializer
-extends      SimplifiedVisitor
-implements   ConstantVisitor
-{
+        extends SimplifiedVisitor
+        implements ConstantVisitor {
     private final ClassPool programClassPool;
     private final ClassPool libraryClassPool;
 
@@ -44,8 +43,7 @@ implements   ConstantVisitor
      * Creates a new StringReferenceInitializer.
      */
     public StringReferenceInitializer(ClassPool programClassPool,
-                                      ClassPool libraryClassPool)
-    {
+                                      ClassPool libraryClassPool) {
         this.programClassPool = programClassPool;
         this.libraryClassPool = libraryClassPool;
     }
@@ -53,20 +51,27 @@ implements   ConstantVisitor
 
     // Implementations for ConstantVisitor.
 
-    public void visitAnyConstant(Clazz clazz, Constant constant) {}
+    public void visitAnyConstant(Clazz clazz, Constant constant) {
+    }
 
 
-    public void visitStringConstant(Clazz clazz, StringConstant stringConstant)
-    {
-        if (stringConstant.referencedClass == null)
-        {
+    public void visitStringConstant(Clazz clazz, StringConstant stringConstant) {
+        if (stringConstant.referencedClass == null) {
             // See if we can find the referenced class.
             stringConstant.referencedClass =
-                findClass(ClassUtil.internalClassName(
-                          ClassUtil.externalBaseType(stringConstant.getString(clazz))));
+                    findClass(ClassUtil.internalClassName(
+                            ClassUtil.externalBaseType(stringConstant.getString(clazz))));
         }
     }
 
+    public void visitUtf8Constant(Clazz clazz, Utf8Constant utf8Constant) {
+        if (utf8Constant.referencedClass == null) {
+            // See if we can find the referenced class.
+            utf8Constant.referencedClass =
+                    findClass(ClassUtil.internalClassName(
+                            ClassUtil.externalBaseType(utf8Constant.getString())));
+        }
+    }
 
     // Small utility methods.
 
@@ -74,14 +79,12 @@ implements   ConstantVisitor
      * Returns the class with the given name, either for the program class pool
      * or from the library class pool, or <code>null</code> if it can't be found.
      */
-    private Clazz findClass(String name)
-    {
+    private Clazz findClass(String name) {
         // First look for the class in the program class pool.
         Clazz clazz = programClassPool.getClass(name);
 
         // Otherwise look for the class in the library class pool.
-        if (clazz == null)
-        {
+        if (clazz == null) {
             clazz = libraryClassPool.getClass(name);
         }
 
